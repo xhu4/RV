@@ -39,3 +39,4 @@ else:
     src_dir = os.path.join(SCRIPT_DIR, 'nvim')
     info(f"Creating symlink to {src_dir} at {NVIM_DIR}")
     check_call(f"ln -s {src_dir} {NVIM_DIR}".split())
+    okay("Success.")

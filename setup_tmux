@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+
+from subprocess import check_call
+import os
+
+from color import info, warn, okay
+
+HOME = os.getenv("HOME")
+SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+CONF = ".tmux.conf"
+HOME_CONF = os.path.join(HOME, CONF)
+THIS_CONF = os.path.join(SCRIPT_DIR, CONF)
+
+if os.path.exists(f"{HOME}/.tmux.conf"):
+    warn(f"{HOME}/.tmux.config already exists. Please backup and remove it.")
+else:
+    info(f"Creating symlink to {THIS_CONF} at {HOME_CONF}")
+    check_call(f"ln -s {THIS_CONF} {HOME_CONF}".split())
