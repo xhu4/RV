@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+from color import okay, warn, info
+import os
+import sys
+import pathlib
+from subprocess import run, check_output, check_call
+
+SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+HOME = os.getenv('HOME')
+NVIM_DIR = os.path.join(HOME, '.config/nvim')
+NVIM_VERSION = 'nightly'
+
+has_neovim = run(["which", "nvim"]).returncode == 0
+has_neovim_dir = os.path.isdir(NVIM_DIR) or os.path.islink(NVIM_DIR)
+
+
+def install_nvim_linux():
+    check_call(
+        f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage".split())
+    check_call("chmod u+x nvim.appimage".split())
+    check_call("sudo mv nvim.appimage /tmp/nvim".split())
+    assert check_output("which nvim".split()) == b"/usr/bin/nvim\n"
+
+
+if has_neovim:
+    okay(f"Neovim already exists.")
+    # TODO: check version
+else:
+    info("Installing neovim.")
+    install_nvim_linux()
+    okay("Success.")
+
+if has_neovim_dir:
+    warn(f"Neovim runtime directory {NVIM_DIR} already exists.")
+    warn(f"Please remove it and retry. (Consider backup it first.)")
+else:
+    src_dir = os.path.join(SCRIPT_DIR, 'nvim')
+    info(f"Creating symlink to {src_dir} at {NVIM_DIR}")
+    check_call(f"ln -s {src_dir} {NVIM_DIR}".split())
