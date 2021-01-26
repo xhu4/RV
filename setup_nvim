@@ -20,6 +20,7 @@ def install_nvim_linux():
         f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage".split())
     check_call("chmod u+x nvim.appimage".split())
     check_call("sudo mv nvim.appimage /tmp/nvim".split())
+    check_call("pip3 install pynvim".split())
     assert check_output("which nvim".split()) == b"/usr/bin/nvim\n"
 
 
