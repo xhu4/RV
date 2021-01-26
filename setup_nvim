@@ -20,6 +20,7 @@ def install_nvim_linux():
         f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage".split())
     check_call("chmod u+x nvim.appimage".split())
     check_call("sudo mv nvim.appimage /tmp/nvim".split())
+    check_call("pip3 install pynvim".split())
     assert check_output("which nvim".split()) == b"/usr/bin/nvim\n"
 
 
@@ -38,3 +39,4 @@ else:
     src_dir = os.path.join(SCRIPT_DIR, 'nvim')
     info(f"Creating symlink to {src_dir} at {NVIM_DIR}")
     check_call(f"ln -s {src_dir} {NVIM_DIR}".split())
+    okay("Success.")
