@@ -2,7 +2,7 @@
 
 from color import fail, okay, info
 import os
-from systuil import HOME, link_to_home, run_cmd, has
+from sysutil import HOME, link_to_home, run_cmd, has
 
 OMZ_DIR = os.path.join(HOME, ".oh_my_zsh")
 OMZ_BK = os.path.join(HOME, ".oh_my_zsh.bk")

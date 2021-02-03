@@ -22,9 +22,9 @@ def link(path_from_this: str, dst_path: str, backup: str):
         shutil.move(dst_path, backup)
     src_path = os.path.join(SCRIPT_DIR, path_from_this)
     run_cmd(f'ln -s {src_path} {dst_path}')
-    okay("Created link:\n\t{src_path} ->\n\t\t{dst_path}")
+    okay(f"Created link:\n\t{src_path} ->\n\t\t{dst_path}")
 
 
-def link_to_home(path_from_this: str, backup_suffix: str):
+def link_to_home(path_from_this: str, backup_suffix: str='.bk'):
     link(path_from_this, os.path.join(HOME, path_from_this),
          os.path.join(HOME, path_from_this + backup_suffix))
