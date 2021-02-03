@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+from color import fail, okay, info
+import os
+from systuil import HOME, link_to_home, run_cmd, has
+
+OMZ_DIR = os.path.join(HOME, ".oh_my_zsh")
+OMZ_BK = os.path.join(HOME, ".oh_my_zsh.bk")
+
+
+def install_zsh_linux():
+    if has("apt"):
+        run_cmd("sudo apt install zsh")
+    elif has("pacman"):
+        run_cmd("pacman -S zsh")
+    elif has("dnf"):
+        run_cmd("dnf install zsh")
+    else:
+        fail("Failed to install zsh. Your package manager is not supported yet.")
+
+
+def install_ohmyzsh():
+    run_cmd('sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+
+
+if __name__ == "__main__":
+    if not has("zsh"):
+        info("Installing zsh...")
+        install_zsh_linux()
+        okay("zsh installed.")
+        info("Setting zsh as default shell...")
+        run_cmd('chsh -s "$(which zsh)"')
+        okay("zsh now is the default.")
+    link_to_home(".oh_my_zsh")
