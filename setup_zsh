@@ -2,10 +2,8 @@
 
 from color import fail, okay, info
 import os
-from sysutil import HOME, link, run_cmd, has
-
-OMZ_DIR = os.path.join(HOME, ".oh_my_zsh")
-OMZ_BK = os.path.join(HOME, ".oh_my_zsh.bk")
+from sysutil import HOME, link_to_home, run_cmd, has
+from subprocess import check_output, check_call
 
 
 def install_zsh_linux():
@@ -20,7 +18,9 @@ def install_zsh_linux():
 
 
 def install_ohmyzsh():
-    run_cmd('sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+    install_sh = check_output(
+        ["curl", "-fsSL", "https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"])
+    check_call(['sh', '-c', install_sh])
 
 
 if __name__ == "__main__":
@@ -29,9 +29,9 @@ if __name__ == "__main__":
         install_zsh_linux()
         okay("zsh installed.")
         info("Setting zsh as default shell...")
-        run_cmd('chsh -s "$(which zsh)"')
+        which_zsh = check_output(["which", "zsh"])
+        run_cmd(f'chsh -s {which_zsh.strip()}')
         okay("zsh now is the default.")
     if not has(os.path.join(HOME, ".oh_my_zsh")):
         install_ohmyzsh()
-    link("custom", os.path.join(HOME, ".oh_my_zsh/custom"),
-         os.path.join(HOME, ".oh_my_zsh/custom.bk"))
+    link_to_home(".oh_my_zsh/custom")

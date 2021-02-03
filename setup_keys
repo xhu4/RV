@@ -5,13 +5,14 @@ import os
 from sys import platform
 import shutil
 from subprocess import check_call
+from sysutil import SCRIPT_DIR, run_cmd
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 def setup_key_linux():
     shutil.move("/usr/share/X11/xkb/symbols/us", "/usr/share/X11/xkb/symbols/us.bk")
-    check_call(f"sudo ln -s {os.path.join(SCRIPT_DIR, 'us')} /usr/share/X11/xkb/symbols/us")
+    run_cmd(f"sudo cp {os.path.join(SCRIPT_DIR, 'us')} /usr/share/X11/xkb/symbols/us")
 
 
 if __name__ == "__main__":
