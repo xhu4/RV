@@ -8,15 +8,20 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-        
-def cprint(color: bcolors, *args, **kwargs):
+
+
+def _cprint(color: bcolors, *args, **kwargs):
     print(color, *args, bcolors.ENDC, **kwargs)
-    
-def info(*args, **kwargs):
-    print(*args, **kwargs)
 
-def okay(*args, **kwargs):
-    cprint(bcolors.OKGREEN, *args, **kwargs)
 
-def warn(*args, **kwargs):
-    cprint(bcolors.WARNING, *args, **kwargs)
+def _getprintf(color: bcolors):
+    def f(*args, **kwargs):
+        _cprint(color, *args, **kwargs)
+
+    return f
+
+
+info = print
+okay = _getprintf(bcolors.OKGREEN)
+warn = _getprintf(bcolors.WARNING)
+fail = _getprintf(bcolors.FAIL)
