@@ -13,14 +13,19 @@ def has(prog: str):
 
 
 def run_cmd(commands: str):
+    warn("Running command:", commands)
     check_call(shlex.split(commands))
 
 
+def add_suffix(path:str, suffix:str):
+    return os.path.join(os.path.dirname(path), os.path.basename(path)+suffix)
+
+
 def link(src: str, dst_path: str, backup_suffix: str = '.bk'):
-    run_cmd(f'ln -s --suffix={backup_suffix} {os.path.join(SCRIPT_DIR, src)} {dst_path}')
+    run_cmd(f'ln -bs --suffix={backup_suffix} {os.path.join(SCRIPT_DIR, src)} {dst_path}')
     okay(f"Created link:")
     okay(check_output(f'ls -l {os.path.join(dst_path, os.path.basename(src))}'.split()))
 
 
 def link_to_home(path_from_this: str, backup_suffix: str = '.bk'):
-    link(path_from_this, os.path.join(HOME, os.path.dirname(path_from_this)), backup_suffix)
+    link(path_from_this, os.path.join(HOME, os.path.dirname(path_from_this), os.path.basename(path_from_this)), backup_suffix)

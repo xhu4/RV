@@ -1,6 +1,6 @@
-alias ec='code ~/.oh-my-zsh/custom/custom.zsh'
+alias ec='nvim ~/.oh-my-zsh/custom/custom.zsh'
 alias ag='alias | grep'
-alias av='code ~/codes/av'
+alias av='nvim ~/codes/av'
 alias sc='source ~/.zshrc'
 alias nvrc='nvim ~/.config/nvim/init.vim'
 alias gb='git br'
