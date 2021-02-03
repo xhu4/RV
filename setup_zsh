@@ -2,7 +2,7 @@
 
 from color import fail, okay, info
 import os
-from sysutil import HOME, link_to_home, run_cmd, has
+from sysutil import HOME, link, run_cmd, has
 
 OMZ_DIR = os.path.join(HOME, ".oh_my_zsh")
 OMZ_BK = os.path.join(HOME, ".oh_my_zsh.bk")
@@ -31,4 +31,5 @@ if __name__ == "__main__":
         info("Setting zsh as default shell...")
         run_cmd('chsh -s "$(which zsh)"')
         okay("zsh now is the default.")
-    link_to_home(".oh_my_zsh")
+    link("custom", os.path.join(HOME, ".oh_my_zsh/custom"),
+         os.path.join(HOME, ".oh_my_zsh/custom.bk"))
