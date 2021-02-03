@@ -31,5 +31,7 @@ if __name__ == "__main__":
         info("Setting zsh as default shell...")
         run_cmd('chsh -s "$(which zsh)"')
         okay("zsh now is the default.")
+    if not has(os.path.join(HOME, ".oh_my_zsh")):
+        install_ohmyzsh()
     link("custom", os.path.join(HOME, ".oh_my_zsh/custom"),
          os.path.join(HOME, ".oh_my_zsh/custom.bk"))
