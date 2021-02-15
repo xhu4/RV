@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+from color import okay, info
+from sysutil import run_cmd, has, link, HOME
+
+DEPS = ["xmonad", "xmobar", "libghc-xmonad-contrib-dev",
+        "libghc-xmonad-dev", "suckless-tools", "scrot", "trayer"]
+
+
+def install_deps():
+    info("Installing dependencies...")
+    run_cmd(f"sudo apt install -y {' '.join(DEPS)}")
+    okay("Success.")
+
+
+def install_configs():
+    info("Linking config files...")
+    link("xmonad/xmonad.hs", os.path.join(HOME, ".xmonad/xmonad.hs"))
+    link("xmonad/xsessionrc", os.path.join(HOME, ".xsessionrc"))
+    link("xmonad/xmobarrc", os.path.join(HOME, ".xmobarrc"))
+    okay("Success.")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Setup xmonad.")
+    parser.add_argument("--skip_deps", const=True, default=False,
+                        action='store_const', help="skip installing dependencies")
+    parser.add_argument("--skip_configs", const=True, default=False,
+                        action='store_const', help="skip linking config files")
+    args = parser.parse_args()
+    args.skip_deps or install_deps()
+    args.skip_configs or install_configs()

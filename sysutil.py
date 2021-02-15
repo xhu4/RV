@@ -22,8 +22,11 @@ def add_suffix(path: str, suffix: str):
 
 
 def link(src: str, dst_path: str, backup_suffix: str = '.bk'):
+    dst_dir = os.path.dirname(dst_path)
     if has(dst_path):
         shutil.move(dst_path, add_suffix(dst_path, backup_suffix))
+    elif not os.path.isdir(dst_dir):
+        os.makedirs(dst_dir)
     run_cmd(f'ln -bs --suffix={backup_suffix} -T {os.path.join(SCRIPT_DIR, src)} {dst_path}')
     okay(f"Created link:")
     okay("\t", check_output(f'ls -ld1 {dst_path}'.split()).decode('utf-8'))
