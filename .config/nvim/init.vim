@@ -8,6 +8,7 @@ set softtabstop=0
 set autoindent
 set smartindent
 set number
+set textwidth=95
 
 syntax on
 filetype on
@@ -47,8 +48,8 @@ call plug#end()
 
 
 " easymotion
-map <Leader><Leader> <Plug>(easymotion-prefix)
-let g:wordmotion_prefix = '<Leader>'
+map <Leader> <Plug>(easymotion-prefix)
+let g:wordmotion_prefix = ','
 
 
 if !exists('g:vscode')
