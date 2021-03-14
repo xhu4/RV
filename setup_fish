@@ -16,7 +16,11 @@ test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists.
   { echo "Setting up bazel completion";
     python3 $SCRIPTDIR/generate_fish_completion.py --bazel=$(which bazel) --output=$CONFDIR/fish/completions/bazel.fish; }
 
+echo "Installing oh-my-fish"
+curl -L https://get.oh-my.fish | fish
+
 echo "Linking config folders"
+test -d "$CONFDIR/fish" || mkdir -p $CONFDIR/fish
 ln -bs $SCRIPTDIR/fish/functions $CONFDIR/fish/functions
 ln -bs $SCRIPTDIR/fish/omf  $CONFDIR/omf
 echo "Linking results:"
