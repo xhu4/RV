@@ -1,3 +1,8 @@
+" Use a more POSIX compatible shell for vim
+if &shell =~# 'fish$'
+  set shell=/usr/bin/zsh
+endif
+
 set exrc
 set secure
 set tabstop=2
@@ -8,18 +13,19 @@ set softtabstop=0
 set autoindent
 set smartindent
 set number
-set textwidth=95
+set foldlevel=99
 
-syntax on
+syntax enable
 filetype on
+filetype plugin indent on
 
 let mapleader = " "
-
 inoremap jk <Esc>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 noremap H 0
 noremap L $
+nnoremap ; zA
 
 command Erc split $MYVIMRC
 command Src source $MYVIMRC
@@ -43,13 +49,19 @@ endif
 
 Plug 'tpope/vim-surround'
 Plug 'chaoren/vim-wordmotion'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'wlemuel/vim-tldr'
+Plug 'dag/vim-fish'
+Plug 'mileszs/ack.vim'
 
 call plug#end()
 
+" ag for ack.vim
+let g:ackprg = 'ag --vimgrep'
 
 " easymotion
-map <Leader> <Plug>(easymotion-prefix)
-let g:wordmotion_prefix = ','
+map <Leader><Leader> <Plug>(easymotion-prefix)
+let g:wordmotion_prefix = '<Leader>'
 
 
 if !exists('g:vscode')
@@ -58,10 +70,9 @@ if !exists('g:vscode')
 else
   " av related
   nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
-  ab cprt Aurora Innovation, Inc. Proprietary and Confidential. Copyright .<Left>
-  command Build call VSCodeNotify('workbench.action.tasks.runTask', 'build_dbg_program')
-  command BuildDebug call VsCodeNotify('workbench.action.tasks.runTask', 'build_program')
+  command Build call VSCodeCall('workbench.action.tasks.runTask', 'build_dbg_program')
+  command BuildDebug call VSCodeNotify('workbench.action.tasks.runTask', 'build_program')
   command Test call VsCodeNotify('workbench.action.tasks.runTask', 'Run this test')
-  command TestFolder call VsCodeNotify('workbench.action.tasks.runTask', 'Run folder test')
-  command Run call VsCodeNotify('workbench.action.tasks.runTask', 'Run this executable')
+  command TestFolder call VSCodeNotify('workbench.action.tasks.runTask', 'Run folder test')
+  command Run call VSCodeNotify('workbench.action.tasks.runTask', 'Run this executable')
 endif
