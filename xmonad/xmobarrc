@@ -10,11 +10,11 @@ Config { font = "xft:Ubuntu Mono-14:antialias=true"
                     , Run Memory ["-t", "Mem: <usedratio>%"] 10
                     , Run Swap [] 10
                     , Run Date "%a %b %_d %l:%M" "date" 10
-                    , Run Wireless "wlp2s0" [ "-t", "[<qualitybar>]<essid>" ] 10
+                    , Run Wireless "wlp59s0" [ "-t", "[<qualitybar>]<essid>" ] 10
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
        , template = "%StdinReader% } <fc=#ee9a00>%date%</fc> { <action=`gnome-control-center
-       wifi` button=1>%wlp2s0wi%</action> | %cpu% | %memory% | %EGPF%"
+       wifi` button=1>%wlp59s0wi%</action> | %cpu% | %memory% | %EGPF%"
        }

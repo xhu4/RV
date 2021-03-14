@@ -6,7 +6,7 @@ from color import okay, info
 from sysutil import run_cmd, has, link, HOME
 
 DEPS = ["xmonad", "xmobar", "libghc-xmonad-contrib-dev",
-        "libghc-xmonad-dev", "suckless-tools", "scrot", "trayer"]
+        "libghc-xmonad-dev", "suckless-tools", "scrot", "trayer", "feh"]
 
 
 def install_deps():

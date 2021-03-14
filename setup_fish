@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+CONFDIR=${XDG_CONFIG_HOME:-$HOME/.config}
+
+if ! which fish; then
+  echo "Installing fish..."
+  sudo apt-add-repository ppa:fish-shell/release-3
+  sudo apt-get update
+  sudo apt-get install fish
+else
+  echo "Fish found"
+fi
+
+test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists." || \
+  { echo "Setting up bazel completion";
+    python3 $SCRIPTDIR/generate_fish_completion.py --bazel=$(which bazel) --output=$CONFDIR/fish/completions/bazel.fish; }
+
+echo "Linking config folders"
+ln -bs $SCRIPTDIR/fish/functions $CONFDIR/fish/functions
+ln -bs $SCRIPTDIR/fish/omf  $CONFDIR/omf
+echo "Linking results:"
+ls -l $CONFDIR/fish/functions
+ls -l $CONFDIR/omf

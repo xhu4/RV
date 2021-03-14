@@ -5,7 +5,7 @@ alias sc='source ~/.zshrc'
 alias nvrc='nvim ~/.config/nvim/init.vim'
 alias gb='git br'
 alias gbd='git br -d'
-alias buildserver='gcloud compute --project "aurora-localization-dev" ssh --zone "us-east1-d" --ssh-flag="-ServeAliveInterval=30" xihu-mapbuild-0 -- -L 8081:localhost:80'
+function buildserver() {gcloud compute --project "aurora-localization-dev" ssh --zone "us-east1-d" --ssh-flag="-ServeAliveInterval=30" xihu-mapbuild-${1} -- -L 808${1}:localhost:80}
 
 bzlrun() {
   rel_bin=$1
