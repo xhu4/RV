@@ -8,9 +8,9 @@ function install_fasd
 end
 
 function install_fzf
-  git clone --depth 1 https://github.com/junegunn/fzf.git /tmp/.fzf
-  /tmp/.fzf/install
-  rm -rf /tmp/.fzf
+  argparse P/prefix= -- --prefix=$HOME $argv
+  git clone --depth 1 https://github.com/junegunn/fzf.git $_flag_prefix/.fzf
+  $_flag_prefix/.fzf/install
   omf install fzf
 end
 
@@ -27,6 +27,10 @@ end
 
 function install_bat
   debinstall -f "https://github.com/sharkdp/bat/releases/download/v0.18.0/bat-musl_%s_amd64.deb" -v 0.18.0
+end
+
+function install_delta
+  debinstall -f "https://github.com/dandavison/delta/releases/download/0.6.0/git-delta_%s_amd64.deb" -v 0.6.0
 end
 
 switch $argv[1]
