@@ -50,6 +50,7 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'chaoren/vim-wordmotion'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'wlemuel/vim-tldr'
 Plug 'dag/vim-fish'
 Plug 'mileszs/ack.vim'
