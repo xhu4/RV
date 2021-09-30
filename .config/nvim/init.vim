@@ -68,12 +68,4 @@ let g:wordmotion_prefix = '<Leader>'
 if !exists('g:vscode')
   set ttyfast
   set wildmenu
-else
-  " av related
-  nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
-  command Build call VSCodeCall('workbench.action.tasks.runTask', 'build_dbg_program')
-  command BuildDebug call VSCodeNotify('workbench.action.tasks.runTask', 'build_program')
-  command Test call VsCodeNotify('workbench.action.tasks.runTask', 'Run this test')
-  command TestFolder call VSCodeNotify('workbench.action.tasks.runTask', 'Run folder test')
-  command Run call VSCodeNotify('workbench.action.tasks.runTask', 'Run this executable')
 endif

@@ -2,26 +2,35 @@
 
 from color import okay, info
 from subprocess import check_output
-from sysutil import run_cmd, link_to_home, has
+from sysutil import os_pick, run_cmd, link_to_home, has
 
-NVIM_VERSION = 'nightly'
+NVIM_VERSION = "nightly"
 
 
 def install_nvim_linux():
     run_cmd(
-        f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage")
+        f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage"
+    )
     run_cmd("chmod u+x nvim.appimage")
     run_cmd("sudo mv nvim.appimage /usr/bin/nvim")
     run_cmd("pip3 install pynvim")
     assert check_output("which nvim".split()) == b"/usr/bin/nvim\n"
 
 
+def install_nvim_darwin():
+    run_cmd(f"brew install nvim")
+    assert has("nvim")
+
+
+install_nvim = os_pick(linux=install_nvim_linux, darwin=install_nvim_darwin)
+
+
 if __name__ == "__main__":
-    if has('nvim'):
+    if has("nvim"):
         okay(f"Neovim already exists.")
     else:
         info("Installing neovim...")
-        install_nvim_linux()
+        install_nvim()
         okay("Success.")
 
-    link_to_home('.config/nvim')
+    link_to_home(".config/nvim")
