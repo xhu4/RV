@@ -12,6 +12,9 @@ else
   echo "Fish found"
 fi
 
+echo setting fish to default shell
+chsh -s fish
+
 test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists." || \
   { echo "Setting up bazel completion";
     python3 $SCRIPTDIR/generate_fish_completion.py --bazel=$(which bazel) --output=$CONFDIR/fish/completions/bazel.fish; }

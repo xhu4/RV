@@ -16,6 +16,7 @@ myLayoutHook =
         $ mkToggle (NOBORDERS ?? FULL ?? EOT)
         $ ThreeCol 1 (5/100) (1/3)
         ||| TwoPane (10/100) (50/100)
+        ||| Tall 1 (3/100) (1/2)
 
 main = do
         xmproc <- spawnPipe "xmobar"

@@ -26,6 +26,7 @@ inoremap <C-e> <End>
 noremap H 0
 noremap L $
 nnoremap ; zA
+noremap <C-_> :Commentary<CR>
 
 command Erc split $MYVIMRC
 command Src source $MYVIMRC
@@ -39,21 +40,23 @@ endif
 
 
 " Plugins
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
 call plug#begin(stdpath('data') . '/plugged')
 
-if exists('g:vscode')
-  Plug 'asvetliakov/vim-easymotion'
-else
-  Plug 'easymotion/vim-easymotion'
-endif
-
+Plug 'asvetliakov/vim-easymotion', Cond(exists('g:vscode'))
+Plug 'easymotion/vim-easymotion', Cond(!exists('g:vscode'), { 'as': 'vsc-easymotion' })
 Plug 'tpope/vim-surround'
 Plug 'chaoren/vim-wordmotion'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'wlemuel/vim-tldr'
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'junegunn/fzf.vim'
+" Plug 'wlemuel/vim-tldr'
 Plug 'dag/vim-fish'
 Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-commentary'
 
 call plug#end()
 
@@ -61,11 +64,13 @@ call plug#end()
 let g:ackprg = 'ag --vimgrep'
 
 " easymotion
-map <Leader><Leader> <Plug>(easymotion-prefix)
+map ; <Plug>(easymotion-prefix)
 let g:wordmotion_prefix = '<Leader>'
 
 
 if !exists('g:vscode')
   set ttyfast
   set wildmenu
+else
+  nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
 endif
