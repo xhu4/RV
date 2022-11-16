@@ -28,7 +28,7 @@ noremap L $
 nnoremap ; zA
 noremap <C-_> :Commentary<CR>
 
-command Erc split $MYVIMRC
+command Erc e $MYVIMRC
 command Src source $MYVIMRC
 
 " Install plug.vim automatically
@@ -73,4 +73,5 @@ if !exists('g:vscode')
   set wildmenu
 else
   nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
+  nnoremap gz <Cmd>call VSCodeNotify('workbench.action.toggleZenMode')<CR>
 endif
