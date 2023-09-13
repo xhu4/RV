@@ -1,6 +1,6 @@
-# Defined in /tmp/fish.zipBY0/gf.fish @ line 1
-function gf
-  set current_branch (git rev-parse --abbrev-ref HEAD)
-  git checkout master && git pull && git flow
-  git checkout $current_branch
+# Defined in /tmp/fish.WIarAh/gf.fish @ line 2
+function gf --wraps='bonsai cascade' --description 'alias gf=bonsai cascade'
+  set branch (git symbolic-ref HEAD)
+  gco master && bonsai cascade
+  gco "$branch"
 end

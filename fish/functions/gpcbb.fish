@@ -1,0 +1,3 @@
+function gpcbb --wraps='avrun localization/goto/debug/generate_pointclouds_within_bounding_box/generate_pointclouds_within_bounding_box' --description 'alias gpcbb=avrun localization/goto/debug/generate_pointclouds_within_bounding_box/generate_pointclouds_within_bounding_box'
+  avrun localization/goto/debug/generate_pointclouds_within_bounding_box/generate_pointclouds_within_bounding_box $argv; 
+end

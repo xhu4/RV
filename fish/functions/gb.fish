@@ -1,4 +1,4 @@
 # Defined via `source`
-function gb --wraps='git br' --description 'alias gb=git br'
-  git br $argv; 
+function gb --wraps='git br' --wraps='bonsai show' --description 'alias gb=bonsai show'
+  bonsai show $argv; 
 end

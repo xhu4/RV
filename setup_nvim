@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 
 from color import okay, info
-from subprocess import check_output
 from sysutil import os_pick, run_cmd, link_to_home, has
 
 NVIM_VERSION = "nightly"
 
 
 def install_nvim_linux():
-    run_cmd(
-        f"curl -LO https://github.com/neovim/neovim/releases/download/{NVIM_VERSION}/nvim.appimage"
-    )
-    run_cmd("chmod u+x nvim.appimage")
-    run_cmd("sudo mv nvim.appimage /usr/bin/nvim")
+    run_cmd("sudo add-apt-repository ppa:neovim-ppa/stable")
+    run_cmd("sudo apt update")
+    run_cmd("sudo apt install neovim")
     run_cmd("pip3 install pynvim")
-    assert check_output("which nvim".split()) == b"/usr/bin/nvim\n"
+    assert has("nvim")
 
 
 def install_nvim_darwin():

@@ -30,7 +30,7 @@ function install_bat
 end
 
 function install_delta
-  debinstall -f "https://github.com/dandavison/delta/releases/download/0.6.0/git-delta-musl_%s_amd64.deb" -v 0.6.0
+  debinstall -f "https://github.com/dandavison/delta/releases/download/0.15.1/git-delta_%s_amd64.deb" -v 0.15.1
 end
 
 switch $argv[1]
@@ -47,4 +47,3 @@ switch $argv[1]
   case '*'
     echo $argv[1] is not supported yet.
 end
-

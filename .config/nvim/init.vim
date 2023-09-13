@@ -1,9 +1,6 @@
 " Use a more POSIX compatible shell for vim
-if &shell =~# 'fish$'
-  set shell=/usr/bin/zsh
-endif
-
 set exrc
+set nowrap
 set secure
 set tabstop=2
 set shiftwidth=2
@@ -14,10 +11,50 @@ set autoindent
 set smartindent
 set number
 set foldlevel=99
+set guicursor=
+set relativenumber
+let g:loaded_netrw=1
+let g:loaded_netrwPlugin=1
 
 syntax enable
 filetype on
 filetype plugin indent on
+
+function! Luapath(module)
+  return stdpath('config') . '/lua/' . a:module . '.lua'
+endfunction
+
+command Erc edit $MYVIMRC
+command Epl edit `=Luapath('plugins')`
+command Elsp edit `=Luapath('lsp')`
+command Src source $MYVIMRC
+command Pu PackerUpdate
+
+" Plugins
+lua require('plugins')
+
+colorscheme tokyonight-night
+
+" easymotion
+map ; <Plug>(easymotion-prefix)
+let g:wordmotion_prefix = '<Leader>'
+
+" surround
+autocmd FileType cpp 
+  \ let b:surround_82="CHECKED_RESULT(\r)"    | " R
+  \ let b:surround_114="RETURN_OR_ASSIGN(\r)" | " r
+  \ let b:surround_79="CHECK_STATUS_OK(\r)"   | " O
+  \ let b:surround_111="RETURN_IF_NOT_OK(\r)" | " o
+
+if !exists('g:vscode')
+  set ttyfast
+  set wildmenu
+  lua require('lsp')
+else
+  nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
+endif
+
+iabbrev <expr> cprt "Aurora Innovation, Inc. Proprietary and Confidential. Copyright" .. strftime("%Y")
 
 let mapleader = " "
 inoremap jk <Esc>
@@ -25,61 +62,37 @@ inoremap <C-a> <Home>
 inoremap <C-e> <End>
 noremap H 0
 noremap L $
-nnoremap ; zA
-noremap <C-_> :Commentary<CR>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+inoremap <C-f><C-f> <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+inoremap <C-f><C-g> <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>dvo <cmd>DiffviewOpen<cr>
+nnoremap <leader>dvc <cmd>DiffviewClose<cr>
+nnoremap <leader>dvr <cmd>DiffviewRefresh<cr>
+nnoremap <silent> <leader>e :lua vim.diagnostic.open_float<cr>
+nnoremap <silent> <leader>q :lua vim.diagnostic.setloclist<cr>
+nnoremap <silent> [d :lua vim.diagnostic.goto_prev<cr>
+nnoremap <silent> ]d :lua vim.diagnostic.goto_next<cr>
+inoremap <C-s> <C-o><cmd>update<cr>
+nnoremap <C-s> <cmd>update<cr>
+nnoremap <C-b> <cmd>NvimTreeToggle<cr>
+nnoremap <leader>tt <cmd>NvimTreeToggle<cr>
+nnoremap <leader>tfo <cmd>NvimTreeFocus<cr>
+nnoremap <leader>tff <cmd>NvimTreeFindFile<cr>
+nnoremap <leader>tc <cmd>NvimTreeCollapse<cr>
 
-command Erc e $MYVIMRC
-command Src source $MYVIMRC
-
-" Install plug.vim automatically
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !sh -c "curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-
-" Plugins
-function! Cond(cond, ...)
-  let opts = get(a:000, 0, {})
-  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+function! GoToTarget()
+  let l:filename = expand('%:t')
+  let l:buildfile = globpath(expand('%:p:h'), 'BUILD')
+  execute "edit +/"..l:filename.." "..l:buildfile
 endfunction
 
-call plug#begin(stdpath('data') . '/plugged')
+nnoremap gb <cmd>call GoToTarget()<cr>
 
-Plug 'asvetliakov/vim-easymotion', Cond(exists('g:vscode'))
-Plug 'easymotion/vim-easymotion', Cond(!exists('g:vscode'), { 'as': 'vsc-easymotion' })
-Plug 'tpope/vim-surround'
-Plug 'chaoren/vim-wordmotion'
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Plug 'junegunn/fzf.vim'
-" Plug 'wlemuel/vim-tldr'
-Plug 'dag/vim-fish'
-Plug 'mileszs/ack.vim'
-Plug 'tpope/vim-commentary'
-
-call plug#end()
-
-" ag for ack.vim
-let g:ackprg = 'ag --vimgrep'
-
-" easymotion
-map ; <Plug>(easymotion-prefix)
-let g:wordmotion_prefix = '<Leader>'
-
-" surround
-autocmd FileType cpp
-      \ let b:surround_{char2nr("c")} ="CHECKED_RESULT(\r)" |
-      \ let b:surround_{char2nr("C")} ="CHECK_STATUS_OK(\r)" |
-      \ let b:surround_{char2nr("r")} ="RETURN_OR_ASSIGN(\r)" |
-      \ let b:surround_{char2nr("R")} ="RETURN_IF_NOT_OK(\r)" |
-      \ let b:surround_{char2nr("n")} ="CONTINUE_OR_ASSIGN(\r)" |
-      \ let b:surround_{char2nr("N")} ="CONTINUE_IF_NOT_OK(\r)" 
-
-if !exists('g:vscode')
-  set ttyfast
-  set wildmenu
-else
-  nnoremap gb <Cmd>call VSCodeNotify('aurora-vscode.jumpToBuild')<CR>
-  nnoremap gz <Cmd>call VSCodeNotify('workbench.action.toggleZenMode')<CR>
-endif
+lua << EOF
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+EOF

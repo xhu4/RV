@@ -1,3 +1,4 @@
+package fasd
 package fzf
 theme boxfish
 theme default

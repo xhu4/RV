@@ -13,10 +13,12 @@ else
 fi
 
 echo setting fish to default shell
+which fish | sudo tee -a /etc/shells
 chsh -s fish
 
 test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists." || \
   { echo "Setting up bazel completion";
+    pip3 install absl-py &&
     python3 $SCRIPTDIR/generate_fish_completion.py --bazel=$(which bazel) --output=$CONFDIR/fish/completions/bazel.fish; }
 
 echo "Installing oh-my-fish"
