@@ -29,3 +29,5 @@ ln -s $SCRIPTDIR/fish/omf  $CONFDIR/omf
 echo "Linking results:"
 ls -l $CONFDIR/fish/functions
 ls -l $CONFDIR/omf
+
+fish -c "fish_add_path $HOME/.local/bin"

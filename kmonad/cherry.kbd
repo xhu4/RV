@@ -40,19 +40,20 @@
 )
 
 (deflayer base
-  esc   q    w    e    r    t    y    u    i    o    p    [    ]   \
+  esc   _    w    e    r    t    y    u    i    o    p    [    ]   \
   tab   a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft  z    x    c    v    b    n    m    ,    .    /    rsft
   lalt lmet lctl            spc                 @mor 
 )
 
-(deflayer symbols
-  _     !    @    #    $    %    ^    &    *   \(   \)    _    _    _
-  _     +    {    }    [    ]    lft down up   rght  -    _    _
-  _     1    2    3    4    5    6    7    8    9    0    _
-  _     _    _             \_                   _    
-)
-
 (defalias
   mor (tap-hold-next 400 ret (layer-toggle symbols))
+  uds (tap-macro (sticky-key 1000 lsft) P100 - :delay 50)
+)
+
+(deflayer symbols
+  `     !    @    #    $    %    ^    &    *   \(   \)    _    _    _
+  ~     +    {    }    [    ]    lft down up   rght  -    =    _
+  _     1    2    3    4    5    6    7    8    9    0    _
+  _     _    _             \_                   _    
 )

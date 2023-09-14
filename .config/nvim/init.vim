@@ -67,6 +67,14 @@ let g:ackprg = 'ag --vimgrep'
 map ; <Plug>(easymotion-prefix)
 let g:wordmotion_prefix = '<Leader>'
 
+" surround
+autocmd FileType cpp
+      \ let b:surround_{char2nr("c")} ="CHECKED_RESULT(\r)" |
+      \ let b:surround_{char2nr("C")} ="CHECK_STATUS_OK(\r)" |
+      \ let b:surround_{char2nr("r")} ="RETURN_OR_ASSIGN(\r)" |
+      \ let b:surround_{char2nr("R")} ="RETURN_IF_NOT_OK(\r)" |
+      \ let b:surround_{char2nr("n")} ="CONTINUE_OR_ASSIGN(\r)" |
+      \ let b:surround_{char2nr("N")} ="CONTINUE_IF_NOT_OK(\r)" 
 
 if !exists('g:vscode')
   set ttyfast

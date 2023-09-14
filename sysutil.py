@@ -60,13 +60,13 @@ def add_suffix(path: str, suffix: str):
     return os.path.join(os.path.dirname(path), os.path.basename(path) + suffix)
 
 
-def link(src: str, dst_path: str, backup_suffix: str = ".bk"):
+def link(src: str, dst_path: str, backup_suffix: str = ".bk", sudo = False):
     dst_dir = os.path.dirname(dst_path)
     if has(dst_path):
         shutil.move(dst_path, add_suffix(dst_path, backup_suffix))
     elif not os.path.isdir(dst_dir):
         os.makedirs(dst_dir)
-    run_cmd(f"ln -s {os.path.join(SCRIPT_DIR, src)} {dst_path}")
+    run_cmd(("sudo " if sudo else "") + f"ln -s {os.path.join(SCRIPT_DIR, src)} {dst_path}")
     okay(f"Created link:")
     okay("\t", check_output(f"ls -ld1 {dst_path}".split()).decode("utf-8"))
 
