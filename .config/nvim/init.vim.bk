@@ -45,6 +45,8 @@ autocmd FileType cpp
   \ let b:surround_114="RETURN_OR_ASSIGN(\r)" | " r
   \ let b:surround_79="CHECK_STATUS_OK(\r)"   | " O
   \ let b:surround_111="RETURN_IF_NOT_OK(\r)" | " o
+  \ let b:surround_65="ASSERT_STATUS_OK"      | " A
+  \ let b:surround_97="ASSERT_RESULT"         | " a
 
 if !exists('g:vscode')
   set ttyfast
