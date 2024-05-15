@@ -23,6 +23,7 @@ vim.opt.mouse = "a"
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
+vim.opt.exrc = true
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -56,8 +57,8 @@ vim.opt.splitbelow = true
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
@@ -99,22 +100,26 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+-- vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+-- vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+-- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- My kepmaps
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Same as <ESC>" })
 vim.keymap.set("i", "<C-S-Left>", "<Home>", { desc = "cursor to start of line" })
 vim.keymap.set("i", "<C-S-Right>", "<End>", { desc = "cursor to end of line" })
-vim.keymap.set("i", "<C-s>", "<cmd>w<CR>", { desc = ":write" })
+-- vim.keymap.set("i", "<C-s>", "<cmd>w<CR>", { desc = ":write" })
 
 vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", { desc = ":write" })
 vim.keymap.set("n", "H", "^", { desc = "Move to the beginning of line" })
 vim.keymap.set("n", "L", "$", { desc = "Move to the end of line" })
+vim.keymap.set("v", "H", "^", { desc = "Move to the beginning of line" })
+vim.keymap.set("v", "L", "$", { desc = "Move to the end of line" })
 vim.keymap.set("n", "gh", ":help <C-r><C-w><CR>", { desc = "Help on cursor" })
+vim.keymap.set("n", "<C-n>", "<cmd>bn<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<C-p>", "<cmd>bp<CR>", { desc = "Previous buffer" })
 
 -- [[ Basic User Commands ]]
 vim.api.nvim_create_user_command("Erc", "e $MYVIMRC", {})
@@ -289,6 +294,9 @@ require("lazy").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
+				defaults = {
+					path_display = { shorten = 2 },
+				},
 				-- defaults = {
 				--   mappings = {
 				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
@@ -361,28 +369,6 @@ require("lazy").setup({
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
-			-- Brief aside: **What is LSP?**
-			--
-			-- LSP is an initialism you've probably heard, but might not understand what it is.
-			--
-			-- LSP stands for Language Server Protocol. It's a protocol that helps editors
-			-- and language tooling communicate in a standardized fashion.
-			--
-			-- In general, you have a "server" which is some tool built to understand a particular
-			-- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
-			-- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-			-- processes that communicate with some "client" - in this case, Neovim!
-			--
-			-- LSP provides Neovim with features like:
-			--  - Go to definition
-			--  - Find references
-			--  - Autocompletion
-			--  - Symbol Search
-			--  - and more!
-			--
-			-- Thus, Language Servers are external tools that must be installed separately from
-			-- Neovim. This is where `mason` and related plugins come into play.
-			--
 			-- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 			-- and elegantly composed help section, `:help lsp-vs-treesitter`
 
@@ -492,11 +478,23 @@ require("lazy").setup({
 			--  - filetypes (table): Override the default list of associated filetypes for the server
 			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
 			--  - settings (table): Override the default settings passed when initializing the server.
+			--
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- clangd = {},
+				clangd = {
+					cmd = {
+						"clangd",
+						"--clang-tidy",
+						"--index",
+						"--background-index=false",
+						"--suggest-missing-includes",
+						"--all-scopes-completion",
+						"--cross-file-rename",
+					},
+				},
 				-- gopls = {},
 				-- pyright = {},
+				pylsp = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -551,6 +549,15 @@ require("lazy").setup({
 					end,
 				},
 			})
+		end,
+	},
+
+	{ -- lsp signature
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = { toggle_key = "<C-s>" },
+		config = function(_, opts)
+			require("lsp_signature").setup(opts)
 		end,
 	},
 
@@ -725,7 +732,10 @@ require("lazy").setup({
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
+		opts = {
+			highlight = { pattern = [[.*<(KEYWORDS)(\([^()]*\))?:?]] },
+			search = { pattern = [[\b(KEYWORDS)([^()]*\)?:?]] },
+		},
 	},
 
 	{ -- Collection of various small independent plugins/modules
@@ -808,10 +818,41 @@ require("lazy").setup({
 	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
 	--
 	-- require 'kickstart.plugins.debug',
-	-- require 'kickstart.plugins.indent_line',
+	-- require("kickstart.plugins.indent_line"),
+	{
+		{ -- Add indentation guides even on blank lines
+			"lukas-reineke/indent-blankline.nvim",
+			-- Enable `lukas-reineke/indent-blankline.nvim`
+			-- See `:help ibl`
+			main = "ibl",
+			opts = {},
+		},
+	},
 	-- require 'kickstart.plugins.lint',
 	-- require 'kickstart.plugins.autopairs',
-	-- require 'kickstart.plugins.neo-tree',
+	-- require("kickstart.plugins.neo-tree"),
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		version = "*",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+		},
+		cmd = "Neotree",
+		keys = {
+			{ "\\", ":Neotree reveal<CR>", { desc = "NeoTree reveal" } },
+		},
+		opts = {
+			filesystem = {
+				window = {
+					mappings = {
+						["\\"] = "close_window",
+					},
+				},
+			},
+		},
+	},
 	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
