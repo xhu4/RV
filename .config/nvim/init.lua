@@ -139,6 +139,31 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "cpp",
+	desc = "Cpp surroundings",
+	group = vim.api.nvim_create_augroup("cpp-surrounding", { clear = true }),
+	callback = function()
+		local function func_surround(name)
+			return {
+				input = { name .. "%b()", "^" .. name .. "%(().*()%)$" },
+				output = { left = name .. "(", right = ")" },
+			}
+		end
+
+		vim.b.minisurround_config = {
+			custom_surroundings = {
+				["r"] = func_surround("RETURN_OR_ASSIGN"),
+				["R"] = func_surround("RETURN_IF_NOT_OK"),
+				["c"] = func_surround("CHECKED_RESULT"),
+				["C"] = func_surround("CHECK_STATUS_OK"),
+				["a"] = func_surround("ASSERT_RESULT"),
+				["A"] = func_surround("ASSERT_STATUS_OK"),
+			},
+		}
+	end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
