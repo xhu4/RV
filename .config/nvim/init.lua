@@ -113,10 +113,8 @@ vim.keymap.set("i", "<C-S-Right>", "<End>", { desc = "cursor to end of line" })
 -- vim.keymap.set("i", "<C-s>", "<cmd>w<CR>", { desc = ":write" })
 
 vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", { desc = ":write" })
-vim.keymap.set("n", "H", "^", { desc = "Move to the beginning of line" })
-vim.keymap.set("n", "L", "$", { desc = "Move to the end of line" })
-vim.keymap.set("v", "H", "^", { desc = "Move to the beginning of line" })
-vim.keymap.set("v", "L", "$", { desc = "Move to the end of line" })
+vim.keymap.set({ "n", "v" }, "H", "^", { desc = "Move to the beginning of line" })
+vim.keymap.set({ "n", "v" }, "L", "$", { desc = "Move to the end of line" })
 vim.keymap.set("n", "gh", ":help <C-r><C-w><CR>", { desc = "Help on cursor" })
 vim.keymap.set("n", "<C-n>", "<cmd>bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<C-p>", "<cmd>bp<CR>", { desc = "Previous buffer" })
@@ -204,6 +202,7 @@ require("lazy").setup({
 			toggler = { line = "<C-_>" },
 			opleader = { line = "<C-_>", block = "<C-\\>" },
 		},
+		cond = not vim.g.vscode,
 	},
 
 	-- Here is a more advanced example where we pass configuration
@@ -222,6 +221,7 @@ require("lazy").setup({
 				changedelete = { text = "~" },
 			},
 		},
+		cond = not vim.g.vscode,
 	},
 
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -260,6 +260,7 @@ require("lazy").setup({
 				["<leader>h"] = { "Git [H]unk" },
 			}, { mode = "v" })
 		end,
+		cond = not vim.g.vscode,
 	},
 
 	-- NOTE: Plugins can specify dependencies.
@@ -393,6 +394,7 @@ require("lazy").setup({
 			-- used for completion, annotations and signatures of Neovim apis
 			{ "folke/neodev.nvim", opts = {} },
 		},
+		cond = not vim.g.vscode,
 		config = function()
 			-- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 			-- and elegantly composed help section, `:help lsp-vs-treesitter`
@@ -908,5 +910,8 @@ require("lazy").setup({
 	},
 })
 
+if vim.g.vscode then
+	vim.cmd("so /home/xihu/av/.nvim.lua")
+end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
