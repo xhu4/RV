@@ -12,6 +12,13 @@ else
   echo "Fish found"
 fi
 
+if ! which starfish; then
+  echo "Installing starship..."
+  curl -sS https://starship.rs/install.sh | sh
+else
+  echo "starship found"
+fi
+
 echo setting fish to default shell
 which fish | sudo tee -a /etc/shells
 chsh -s fish
@@ -21,8 +28,12 @@ test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists.
     pip3 install absl-py &&
     python3 $SCRIPTDIR/generate_fish_completion.py --bazel=$(which bazel) --output=$CONFDIR/fish/completions/bazel.fish; }
 
-echo "Installing oh-my-fish"
-curl -L https://get.oh-my.fish | fish
+if ! omf --version; then
+  echo "Installing oh-my-fish"
+  curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+else
+  echo "omf found"
+fi
 
 echo "Linking config folders"
 test -d "$CONFDIR/fish" || mkdir -p $CONFDIR/fish
