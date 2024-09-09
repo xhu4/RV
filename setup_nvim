@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from color import okay, info
 from sysutil import os_pick, run_cmd, link_to_home, has
 
@@ -7,9 +8,10 @@ NVIM_VERSION = "nightly"
 
 
 def install_nvim_linux():
-    run_cmd("sudo add-apt-repository ppa:neovim-ppa/stable")
-    run_cmd("sudo apt update")
-    run_cmd("sudo apt install neovim")
+    run_cmd("curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz")
+    run_cmd("sudo rm -rf /opt/nvim")
+    run_cmd("sudo tar -C /opt -xzf nvim-linux64.tar.gz")
+    os.system("fish -c 'fish_add_path /opt/nvim-linux64/bin'")
     run_cmd("pip3 install pynvim")
     assert has("nvim")
 
