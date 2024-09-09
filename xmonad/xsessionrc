@@ -3,7 +3,7 @@ export GTK_IM_MODULE="ibus"
 ibus-daemon &
 
 # feh --bg-scale --randomize ~/Pictures/Wallpapers/*
-feh --bg-scale ~/Pictures/Wallpapers/eva-nerv.png
+feh --bg-scale /usr/share/backgrounds/source-ubuntu.png
 trayer --edge top --align right --SetDockType true --SetPartialStrut true \
   --expand true --width 10 --transparent true --tint 0x191970 --height 22 &
 

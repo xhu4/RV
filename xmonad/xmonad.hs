@@ -9,7 +9,6 @@ import XMonad.Layout.TwoPane (TwoPane(..))
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
-import XMonad.Actions.Volume
 import System.IO
 
 myLayoutHook =
@@ -34,7 +33,5 @@ main = do
                 , ((mod4Mask .|. shiftMask, xK_p), spawn "sleep 0.2; scrot -s '/tmp/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f'")
                 , ((mod4Mask, xK_F4), spawn "shutdown -P now")
                 , ((mod4Mask, xK_f), sendMessage $ Toggle FULL)
-                , ((mod4Mask, xK_u), raiseVolume 3 >> return ())
-                , ((mod4Mask, xK_d), lowerVolume 3 >> return())
                 , ((0, xK_Print), spawn "scrot")
                 ]
