@@ -19,6 +19,9 @@ else
   echo "starship found"
 fi
 
+./install fzf
+./install bat
+
 echo setting fish to default shell
 which fish | sudo tee -a /etc/shells
 chsh -s fish
