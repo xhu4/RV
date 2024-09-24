@@ -167,6 +167,7 @@ require("lazy").setup({
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 	{ "tpope/vim-fugitive", dependencies = { "tpope/vim-rhubarb" } },
 	"chaoren/vim-wordmotion", -- Move inner word
+  "nickeb96/fish.vim",
 
 	-- NOTE: Plugins can also be added by using a table,
 	-- with the first argument being the link and the following

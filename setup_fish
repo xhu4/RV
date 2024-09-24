@@ -38,6 +38,7 @@ fi
 echo "Linking config folders"
 test -d "$CONFDIR/fish" || mkdir -p $CONFDIR/fish
 ln -s $SCRIPTDIR/fish/functions $CONFDIR/fish/functions
+rm -rf $CONFDIR/omf
 ln -s $SCRIPTDIR/fish/omf  $CONFDIR/omf
 echo "Linking results:"
 ls -l $CONFDIR/fish/functions

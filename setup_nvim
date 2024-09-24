@@ -8,7 +8,9 @@ NVIM_VERSION = "nightly"
 
 
 def install_nvim_linux():
-    run_cmd("curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz")
+    run_cmd(
+        "curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+    )
     run_cmd("sudo rm -rf /opt/nvim")
     run_cmd("sudo tar -C /opt -xzf nvim-linux64.tar.gz")
     os.system("fish -c 'fish_add_path /opt/nvim-linux64/bin'")
@@ -22,7 +24,6 @@ def install_nvim_darwin():
 
 
 install_nvim = os_pick(linux=install_nvim_linux, darwin=install_nvim_darwin)
-
 
 if __name__ == "__main__":
     if has("nvim"):
