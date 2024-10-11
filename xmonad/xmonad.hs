@@ -20,7 +20,7 @@ myLayoutHook =
 
 main = do
         xmproc <- spawnPipe "xmobar"
-        xmonad $ docks $ fullscreenSupport $ defaultConfig
+        xmonad $ docks $ fullscreenSupport $ def
                 { layoutHook = avoidStruts myLayoutHook
                 , terminal = "gnome-terminal"
                 , logHook = dynamicLogWithPP xmobarPP
@@ -33,5 +33,6 @@ main = do
                 , ((mod4Mask .|. shiftMask, xK_p), spawn "sleep 0.2; scrot -s '/tmp/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f'")
                 , ((mod4Mask, xK_F4), spawn "shutdown -P now")
                 , ((mod4Mask, xK_f), sendMessage $ Toggle FULL)
+                , ((mod4Mask, xK_s), spawn "xrandr --auto")
                 , ((0, xK_Print), spawn "scrot")
                 ]
