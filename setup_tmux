@@ -1,6 +1,0 @@
-#!/usr/bin/env python3
-
-from sysutil import link_to_home
-
-if __name__ == "__main__":
-    link_to_home('.tmux.conf')

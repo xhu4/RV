@@ -2,6 +2,7 @@ starship init fish | source
 fzf --fish | source
 fish_vi_key_bindings
 set -xg EDITOR nvim
+eval (brew shellenv)
 
 bind \ca beginning-of-line
 bind \ce end-of-line

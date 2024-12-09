@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+RVDIR=$(dirname $(realpath "$0"))
+echo "RVDIR=" $RVDIR
+
+./setup_brew
+./setup_fish
+
+brew install neovim
+ln -s $RVDIR/.config/nvim $HOME/.config/nvim
+
+mkdir -p ~/.local/share/fonts
+unzip -o fonts/FiraCode.zip -d ~/.local/share/fonts
+
+brew install tmux
+ln -s $RVDIR/.tmux.conf 
+
+brew install lazygit

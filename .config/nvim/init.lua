@@ -167,7 +167,7 @@ require("lazy").setup({
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 	{ "tpope/vim-fugitive", dependencies = { "tpope/vim-rhubarb" } },
 	"chaoren/vim-wordmotion", -- Move inner word
-  "nickeb96/fish.vim",
+	"nickeb96/fish.vim",
 
 	-- NOTE: Plugins can also be added by using a table,
 	-- with the first argument being the link and the following
@@ -507,36 +507,38 @@ require("lazy").setup({
 					},
 					filetypes = { "cpp", "c" },
 				},
+				mypy = {},
+				ruff = {},
 				-- pbls = {},
 				-- gopls = {},
-				basedpyright = {
-					settings = {
-						basedpyright = {
-							analysis = {
-								extraPaths = vim.list_extend(
-									{ "external/python3.10/include/python3.10", "third_party/py" },
-									vim.fn.glob("external/internal_pip_dependency_*/pypi__*", false, true)
-								),
-								typeCheckingMode = "standard",
-							},
-						},
-					},
-				},
-				pylsp = {
-					settings = {
-						pylsp = {
-							plugins = {
-								pycodestyle = { enabled = false },
-								pyflakes = { enabled = false },
-								autopep8 = { enabled = false },
-								pylint = { enabled = true },
-								isort = { enabled = false },
-								black = { enabled = false },
-							},
-							configurationSources = { "black" },
-						},
-					},
-				},
+				-- basedpyright = {
+				-- 	settings = {
+				-- 		basedpyright = {
+				-- 			analysis = {
+				-- 				extraPaths = vim.list_extend(
+				-- 					{ "external/python3.10/include/python3.10", "third_party/py" },
+				-- 					vim.fn.glob("external/internal_pip_dependency_*/pypi__*", false, true)
+				-- 				),
+				-- 				typeCheckingMode = "standard",
+				-- 			},
+				-- 		},
+				-- 	},
+				-- },
+				-- pylsp = {
+				-- 	settings = {
+				-- 		pylsp = {
+				-- 			plugins = {
+				-- 				pycodestyle = { enabled = false },
+				-- 				pyflakes = { enabled = false },
+				-- 				autopep8 = { enabled = false },
+				-- 				pylint = { enabled = true },
+				-- 				isort = { enabled = false },
+				-- 				black = { enabled = false },
+				-- 			},
+				-- 			configurationSources = { "black" },
+				-- 		},
+				-- 	},
+				-- },
 				-- black = {},
 				-- isort = {},
 				-- rust_analyzer = {},
