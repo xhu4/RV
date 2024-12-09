@@ -1,37 +1,78 @@
 #!/usr/bin/env fish
 
+function info
+  echo (set_color blue) $argv
+end
+
+function setup_artifactory
+  mkdir -p $HOME/.config/pip
+
+  if not set -q ARTIFACTORY_USER
+    info set ARTIFACTORY_USER to $USER
+    set -xU ARTIFACTORY_USER $USER
+  end
+
+  if not set -q ARTIFACTORY_PASS
+    read -s -P "Artifactory Token (https://geckorobotics.jfrog.io/): " arti_token
+    set -xU ARTIFACTORY_PASS $arti_token
+  end
+
+  if not grep -q "geckorobotics.jfrog.io/artifactory" $HOME/.config/pip/pip.conf
+    echo "
+    [global]
+    index-url = https://$ARTIFACTORY_USER:$ARTIFACTORY_PASS@geckorobotics.jfrog.io/artifactory/api/pypi/pypi/simple
+    " >> $HOME/.config/pip/pip.conf
+  end
+
+  poetry config repositories.geckorobotics-pypi https://geckorobotics.jfrog.io/artifactory/api/pypi/pypi/simple
+  poetry config http-basic.geckorobotics-pypi $ARTIFACTORY_USER $ARTIFACTORY_PASS
+
+  set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_USERNAME $ARTIFACTORY_USER
+  set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_PASSWORD $ARTIFACTORY_PASS
+  set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_LOCAL_USERNAME $ARTIFACTORY_USER
+  set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_LOCAL_PASSWORD $ARTIFACTORY_PASS
+  set -xU ARTIFACTORY_PASSWORD $ARTIFACTORY_PASS
+
+  conan remote add conan https://geckorobotics.jfrog.io/artifactory/api/conan/conan
+  conan remote login conan $ARTIFACTORY_USER -p $ARTIFACTORY_PASS
+
+  conan remote add conan-local https://geckorobotics.jfrog.io/artifactory/api/conan/conan-local
+  conan remote login conan-local $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD
+end
+
+function setup_docker
+  info "Adding Docker's official GPG key"
+  sudo apt-get update
+  sudo apt-get install ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+  info "Adding Docker repo to Apt sources"
+  bash -c 'echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
+  sudo apt-get update
+
+  info "Installing docker"
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  info "Add docker user group"
+  sudo groupadd docker
+  sudo usermod -aG docker $USER
+  newgrp docker
+
+  info "Test docker with hello-world"
+  docker run hello-world
+end
+
 brew update
 brew install poetry conan
 
-mkdir -p $HOME/.config/pip
+setup_artifactory
 
-if not set -q ARTIFACTORY_USER
-	echo set ARTIFACTORY_USER to $USER
-	set -xg ARTIFACTORY_USER $USER
+# Setup Docker
+if ! which -s docker
+  setup_docker
 end
-
-if not set -q ARTIFACTORY_PASS
-	read -s -P "Artifactory Token (https://geckorobotics.jfrog.io/): " arti_token
-	set -xg ARTIFACTORY_PASS $arti_token
-end
-
-echo "
-[global]
-index-url = https://$ARTIFACTORY_USER:$ARTIFACTORY_PASS@geckorobotics.jfrog.io/artifactory/api/pypi/pypi/simple
-" >> $HOME/.config/pip/pip.conf
-
-poetry config repositories.geckorobotics-pypi https://geckorobotics.jfrog.io/artifactory/api/pypi/pypi/simple
-poetry config http-basic.geckorobotics-pypi $ARTIFACTORY_USER $ARTIFACTORY_PASS
-
-set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_USERNAME $ARTIFACTORY_USER
-set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_PASSWORD $ARTIFACTORY_PASS
-set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_LOCAL_USERNAME $ARTIFACTORY_USER
-set -xU POETRY_HTTP_BASIC_GECKOROBOTICS_PYPI_LOCAL_PASSWORD $ARTIFACTORY_PASS
-set -xU ARTIFACTORY_PASSWORD $ARTIFACTORY_PASS
-
-conan remote add conan https://geckorobotics.jfrog.io/artifactory/api/conan/conan
-conan remote login conan $ARTIFACTORY_USER -p $ARTIFACTORY_PASS
-
-conan remote add conan-local https://geckorobotics.jfrog.io/artifactory/api/conan/conan-local
-conan remote login conan-local $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD
-
