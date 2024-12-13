@@ -1,2 +1,5 @@
 __pycache__
 lazy-lock.json
+xmonad/
+!xmonad/xmonad.hs
+!xmonad/xmobarrc
