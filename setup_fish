@@ -3,16 +3,27 @@
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 CONFDIR=${XDG_CONFIG_HOME:-$HOME/.config}
 
-brew install fish
-brew install starship
-brew install fzf
-brew install bat
-
-if ! grep $(which fish) /etc/shells; then
-  echo >> /etc/shells
+if ! which fish; then
+  echo "Installing fish..."
+  sudo apt-add-repository ppa:fish-shell/release-3
+  sudo apt-get update
+  sudo apt-get install fish
+else
+  echo "Fish found"
 fi
+
+if ! which starfish; then
+  echo "Installing starship..."
+  curl -sS https://starship.rs/install.sh | sh
+else
+  echo "starship found"
+fi
+
+./install fzf
+./install bat
+
 echo setting fish to default shell
-which fish >> /etc/shells
+which fish | sudo tee -a /etc/shells
 chsh -s fish
 
 test -f "$CONFDIR/fish/completions/bazel.fish" && echo "Bazel completion exists." || \
@@ -37,4 +48,3 @@ ls -l $CONFDIR/fish/functions
 ls -l $CONFDIR/omf
 
 fish -c "fish_add_path $HOME/.local/bin"
-

@@ -524,21 +524,21 @@ require("lazy").setup({
 				-- 		},
 				-- 	},
 				-- },
-				-- pylsp = {
-				-- 	settings = {
-				-- 		pylsp = {
-				-- 			plugins = {
-				-- 				pycodestyle = { enabled = false },
-				-- 				pyflakes = { enabled = false },
-				-- 				autopep8 = { enabled = false },
-				-- 				pylint = { enabled = true },
-				-- 				isort = { enabled = false },
-				-- 				black = { enabled = false },
-				-- 			},
-				-- 			configurationSources = { "black" },
-				-- 		},
-				-- 	},
-				-- },
+				pylsp = {
+					settings = {
+						pylsp = {
+							plugins = {
+								pycodestyle = { enabled = false },
+								pyflakes = { enabled = false },
+								autopep8 = { enabled = false },
+								pylint = { enabled = true },
+								isort = { enabled = false },
+								black = { enabled = false },
+							},
+							-- configurationSources = { "black" },
+						},
+					},
+				},
 				-- black = {},
 				-- isort = {},
 				-- rust_analyzer = {},
@@ -629,7 +629,7 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "isort", "black", "flake8" },
+				python = { "ruff", args = { "--fix" } },
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.

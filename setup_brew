@@ -3,4 +3,6 @@
 if ! which brew; then
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	fish_add_path -a /home/linuxbrew/.linuxbrew/bin/
+	export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/
+	echo "export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/" >> $HOME/.bashrc
 fi

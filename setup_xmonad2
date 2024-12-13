@@ -1,0 +1,43 @@
+#!/usr/bin/env fish
+
+set -l RVDIR (realpath (status dirname))
+echo "RVDIR=" $RVDIR
+
+function setup_stack
+  if not which -s stack
+    if not which -s ghcup
+      brew install ghcup
+      $(SHELL fish_add_path ~/.ghcup/bin/)
+    end
+    and ghcup install stack
+  end
+end
+
+function install_xmonad
+  sudo apt install git libx11-dev libxft-dev libxinerama-dev libxrandr-dev libxss-dev libgmp3-dev
+  and if not test -d ~/.config/xmonad
+    ln -s $RVDIR/xmonad ~/.config/xmonad 
+  end
+  and cd ~/.config/xmonad
+  and if not test -d xmonad; git clone https://github.com/xmonad/xmonad; end
+  and if not test -d xmonad-contrib; git clone https://github.com/xmonad/xmonad-contrib; end
+
+  and setup_stack
+  and if not test -f stack.yaml; stack init; end
+  and stack install
+  fish -c "fish_add_path $HOME/.local/bin/"
+end
+
+function install_xmobar
+  sudo apt install xorg-dev libxrandr-dev libpango1.0-dev
+  and sudo apt install libasound2-dev libxpm-dev libmpd-dev
+  and ghcup install cabal
+  and ghcup install ghc
+  and ghcup set ghc
+  and cabal update
+  and cabal install xmobar -fall_extensions
+end
+
+if not which -s xmonad; install_xmonad; end
+and sudo apt install suckless-tools
+and install_xmobar
