@@ -3,7 +3,7 @@ from color import warn, okay
 import os
 import shutil
 import shlex
-from subprocess import run, check_call, check_output
+from subprocess import check_call, check_output
 from enum import Enum
 from platform import system
 
@@ -48,7 +48,7 @@ def os_pick(windows=None, darwin=None, linux=None, other=None):
 
 
 def has(prog: str):
-    return run(["which", prog]).returncode == 0 or os.path.exists(prog)
+    return shutil.which(prog) is not None
 
 
 def run_cmd(commands: str):
@@ -67,7 +67,7 @@ def link(src: str, dst_path: str, backup_suffix: str = ".bk", sudo = False):
     elif not os.path.isdir(dst_dir):
         os.makedirs(dst_dir)
     run_cmd(("sudo " if sudo else "") + f"ln -s {os.path.join(SCRIPT_DIR, src)} {dst_path}")
-    okay(f"Created link:")
+    okay("Created link:")
     okay("\t", check_output(f"ls -ld1 {dst_path}".split()).decode("utf-8"))
 
 

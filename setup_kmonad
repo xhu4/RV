@@ -8,11 +8,15 @@ from tempfile import TemporaryDirectory
 
 
 def install_stack():
+    if has("stack"):
+        return
     info("Installing stack...")
-    run_cmd(f"curl -sSL https://get.haskellstack.org/ | sh")
+    run_cmd("curl -sSL https://get.haskellstack.org/ | sh")
     okay("Success.")
 
 def install_kmonad():
+    if has("kmonad"):
+        return
     install_stack()
     info("Cloning kmonad...")
     with TemporaryDirectory() as tmpdir:
@@ -35,10 +39,9 @@ def install_configs():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Setup xmonad.")
+    parser = argparse.ArgumentParser(description="Setup kmonad.")
     parser.add_argument("--skip_config", const=True, default=False,
                         action='store_const', help="skip linking kbd files")
     args = parser.parse_args()
-    if not has("kmonad"):
-        install_kmonad()
+    install_kmonad()
     args.skip_config or install_configs()
