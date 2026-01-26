@@ -124,6 +124,18 @@ vim.keymap.set("n", "gh", ":help <C-r><C-w><CR>", { desc = "Help on cursor" })
 vim.keymap.set("n", "<C-n>", "<cmd>bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<C-p>", "<cmd>bp<CR>", { desc = "Previous buffer" })
 
+function copyright()
+	local ft = require("Comment.ft")
+	local U = require("Comment.utils")
+	local filetype = vim.bo.filetype
+	local comment_string = ft.get(filetype, U.ctype.linewise)
+	vim.api.nvim_set_current_line(
+		comment_string:format(" Copyright (c) " .. os.date("%Y") .. " Gecko Robotics, Inc. All rights reserved.")
+	)
+end
+
+vim.keymap.set("n", "<leader>cp", copyright)
+
 -- [[ Basic User Commands ]]
 vim.api.nvim_create_user_command("Erc", "e $MYVIMRC", {})
 vim.api.nvim_create_user_command("Src", "so $MYVIMRC", {})
@@ -256,6 +268,7 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
 		branch = "0.1.x",
+		cond = not vim.g.vscode,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -362,8 +375,8 @@ require("lazy").setup({
 		end,
 	},
 
-	"github/copilot.vim",
-	"tpope/vim-dispatch",
+	{ "github/copilot.vim", cond = not vim.g.vscode },
+	{ "tpope/vim-dispatch", cond = not vim.g.vscode },
 
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
@@ -508,7 +521,7 @@ require("lazy").setup({
 					filetypes = { "cpp", "c" },
 				},
 				mypy = {},
-				ruff = {},
+				-- ruff = {},
 				-- pbls = {},
 				-- gopls = {},
 				-- basedpyright = {
@@ -539,6 +552,9 @@ require("lazy").setup({
 						},
 					},
 				},
+				bashls = {},
+				shfmt = {},
+				shellcheck = {},
 				-- black = {},
 				-- isort = {},
 				-- rust_analyzer = {},
@@ -629,7 +645,7 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "ruff", args = { "--fix" } },
+				python = { "ruff" },
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.
@@ -637,10 +653,12 @@ require("lazy").setup({
 				bzl = { "buildifier" },
 			},
 		},
+		cond = not vim.g.vscode,
 	},
 
 	{ -- Autocompletion
 		"hrsh7th/nvim-cmp",
+		cond = not vim.g.vscode,
 		event = "InsertEnter",
 		dependencies = {
 			-- Snippet Engine & its associated nvim-cmp source
@@ -819,6 +837,7 @@ require("lazy").setup({
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
+		cond = not vim.g.vscode,
 		opts = {
 			ensure_installed = { "bash", "c", "html", "lua", "luadoc", "markdown", "vim", "vimdoc" },
 			-- Autoinstall languages that are not installed
@@ -875,6 +894,7 @@ require("lazy").setup({
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		version = "*",
+		cond = not vim.g.vscode,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -895,6 +915,11 @@ require("lazy").setup({
 				},
 			},
 		},
+	},
+	{
+		"mrcjkb/haskell-tools.nvim",
+		version = "^4",
+		lazy = false,
 	},
 	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
@@ -926,8 +951,5 @@ require("lazy").setup({
 	},
 })
 
-if vim.g.vscode then
-	vim.cmd("so /home/xihu/av/.nvim.lua")
-end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
