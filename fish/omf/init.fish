@@ -14,7 +14,12 @@ abbr prn poetry run nvim
 
 abbr gco git checkout
 abbr gst git status
+abbr gcan git commit --amend --no-edit
 abbr gcan! git commit -a --amend --no-edit
 abbr gb git branch -vv
+abbr da --set-cursor "docker exec -it % bash"
 abbr killport --set-cursor "lsof -ti:% | xargs kill -9"
+abbr cf nvim ~/.config/omf/init.fish
+abbr cx nvim ~/.config/xmonad/xmonad.hs
+abbr cb nvim ~/.config/xmobar/xmobarrc
 # eval (direnv hook fish)
