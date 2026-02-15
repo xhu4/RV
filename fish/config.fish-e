@@ -1,0 +1,11 @@
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+    starship init fish | source
+end
+
+# bun
+set -Ux BUN_INSTALL "/Users/HuXiukun/.bun"
+fish_add_path "/Users/HuXiukun/.bun/bin"
+
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/HuXiukun/.ghcup/bin $PATH # ghcup-env

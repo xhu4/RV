@@ -1,4 +1,3 @@
-# Defined via `source`
-function gcan! --wraps='git commit -v -a --amend --no-edit' --description 'alias gcan!=git commit -v -a --amend --no-edit'
-  git commit -v -a --amend --no-edit $argv; 
+function gcan! --wraps='git commit --amend --no-edit' --wraps='git commit -m --amend --no-edit' --wraps='git commit -a --amend --no-edit' --description 'alias gcan!=git commit -a --amend --no-edit'
+  git commit -a --amend --no-edit $argv; 
 end

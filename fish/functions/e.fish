@@ -1,3 +1,4 @@
-function e --wraps='emacsclient -nw' --description 'alias e=emacsclient -nw'
-  emacsclient -nw $argv; 
+function e --wraps=nvim --description 'alias e=nvim'
+  nvim $argv
+        
 end

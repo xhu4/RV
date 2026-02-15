@@ -1,1 +1,0 @@
-/home/xihu/.fzf/shell/key-bindings.fish
