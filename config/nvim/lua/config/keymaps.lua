@@ -1,6 +1,7 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
+
 local set_keymaps = function()
   vim.keymap.set("i", "jk", "<Esc>", { desc = "Escape" })
   vim.keymap.set("n", "gh", function()
@@ -32,5 +33,4 @@ local set_keymaps = function()
   vim.keymap.set({ "i", "n" }, "<C-.><C-.>", "<Cmd>source %<CR>", { desc = "Source current file." })
   vim.keymap.set({ "i", "n" }, "<C-Q>", "<Cmd>bdelete<CR>", { desc = "Delete buffer and window." })
 end
-
 vim.schedule(set_keymaps)
