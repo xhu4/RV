@@ -1,0 +1,1 @@
+/home/xiukun/.config/omarchy/current/theme/neovim.lua
