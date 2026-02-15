@@ -21,6 +21,7 @@ return {
       { "<leader><space>", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
       { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
       { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
+      { "<C-CR>", Snacks.zen.zoom, desc = "Zoom window" },
     },
   },
   {
@@ -113,6 +114,12 @@ return {
       highlight = {
         pattern = { [[.*<(KEYWORDS):]], [[.*<(KEYWORDS)\(xiukun\):]] },
       },
+    },
+  },
+  {
+    "blink/cmp.nvim",
+    opts = {
+      keymap = { preset = "super-tab" },
     },
   },
 }
