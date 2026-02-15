@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import argparse
+from color import okay, info
+from sysutil import run_cmd, has
+from tempfile import TemporaryDirectory
+
+
+def install_stack():
+    if has("stack"):
+        return
+    info("Installing stack...")
+    run_cmd("curl -sSL https://get.haskellstack.org/ | sh")
+    okay("Success.")
+
+
+def install_kmonad():
+    if has("kmonad"):
+        return
+    install_stack()
+    info("Cloning kmonad...")
+    with TemporaryDirectory() as tmpdir:
+        run_cmd(f"git clone https://github.com/kmonad/kmonad {tmpdir}")
+        info("Building and installing kmonad...")
+        run_cmd(f"stack install {tmpdir}")
+
+
+if __name__ == "__main__":
+    install_kmonad()
