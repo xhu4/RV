@@ -1,0 +1,42 @@
+# See https://git-scm.com/docs/git-config
+
+[alias]
+	base = rev-parse --abbrev-ref @{upstream}
+	child = !git for-each-ref --format=\"%(refname:short) %(upstream:short)\" refs/heads | grep \" $(git branch --show-current)\" | cut -d \" \" -f1
+	co = checkout
+	br = branch -vv
+	ci = commit
+	st = status
+	up = !git checkout $(git base)
+	mb = !git merge $(git base) --no-edit
+	rb = !git rebase $(git base)
+	down = !git checkout $(git child)
+	ph = push origin
+[init]
+	defaultBranch = master
+[pull]
+	rebase = true 			 # Rebase (instead of merge) on pull
+[push]
+	autoSetupRemote = false   # Automatically set upstream branch on push
+	default = current
+[diff]
+	algorithm = histogram    # Clearer diffs on moved/edited lines
+	colorMoved = plain       # Highlight moved blocks in diffs
+	mnemonicPrefix = true    # More intuitive refs in diff output
+[commit]
+	verbose = true           # Include diff comment in commit message template
+[column]
+	ui = auto 			     # Output in columns when possible
+[branch]
+	sort = -committerdate    # Sort branches by most recent commit first
+  autoSetupMerge = always  # Always set up tracking branches on checkout
+[tag]
+	sort = -version:refname  # Sort version numbers as you would expect
+[rerere]
+	enabled = true           # Record and reuse conflict resolutions
+	autoupdate = true        # Apply stored conflict resolutions automatically
+[user]
+	name = Xiukun Hu
+	email = xiukun.hu@geckorobotics.com
+[url "ssh://git@github.com"]
+  insteadOf = https://github.com/
