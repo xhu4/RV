@@ -32,5 +32,28 @@ local set_keymaps = function()
   end, { expr = false, desc = "Toggle comment line" })
   vim.keymap.set({ "i", "n" }, "<C-.><C-.>", "<Cmd>source %<CR>", { desc = "Source current file." })
   vim.keymap.set({ "i", "n" }, "<C-Q>", "<Cmd>bdelete<CR>", { desc = "Delete buffer and window." })
+
+  -- Jump to CMakeLists.txt section for current C++/HPP file
+  vim.keymap.set("n", "gm", function()
+    local current_file = vim.fn.expand("%:p")
+    local cmake_file = vim.fs.find("CMakeLists.txt", { upward = true, type = "file", path = current_file })[1]
+    if not cmake_file then
+      vim.notify("No CMakeLists.txt found", vim.log.levels.ERROR)
+      return
+    end
+    vim.cmd("edit " .. cmake_file)
+    local filename = vim.fs.basename(current_file)
+    vim.fn.search(filename, "w")
+    vim.cmd("normal! zz")
+  end, { desc = "Jump to CMakeLists.txt for current file" })
+
+  vim.keymap.set("n", "gp", function()
+    local package_file = vim.fs.find("package.xml", { upward = true, type = "file", path = vim.fn.expand("%:p") })[1]
+    if not package_file then
+      vim.notify("No package.xml found", vim.log.levels.ERROR)
+      return
+    end
+    vim.cmd("edit " .. package_file)
+  end, { desc = "Open package.xml for current project" })
 end
 vim.schedule(set_keymaps)

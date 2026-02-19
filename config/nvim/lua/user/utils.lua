@@ -100,4 +100,43 @@ M.ensure_pragma_once = function(buf)
   vim.api.nvim_buf_set_lines(buf, ln, ln, false, { "", "#pragma once" })
 end
 
+M.is_cpp_file = function(filepath)
+  local filename = vim.fn.fnamemodify(filepath, ":t")
+  local filetype = vim.bo.filetype
+  return filetype == "cpp" or filetype == "c" or filename:match("%.cpp$") or filename:match("%.hpp$")
+end
+
+M.find_cmake_file = function(start_dir)
+  local dir = start_dir
+  while dir ~= "/" do
+    local candidate = dir .. "/CMakeLists.txt"
+    if vim.fn.filereadable(candidate) == 1 then
+      return candidate
+    end
+    dir = vim.fn.fnamemodify(dir, ":h")
+  end
+  return nil
+end
+
+M.jump_to_cmake_section = function()
+  local current_file = vim.fn.expand("%:p")
+  local filename = vim.fn.expand("%:t")
+  local current_dir = vim.fn.expand("%:p:h")
+
+  if not M.is_cpp_file(current_file) then
+    vim.notify("Not a C++ or HPP file", vim.log.levels.WARN)
+    return
+  end
+
+  local cmake_file = M.find_cmake_file(current_dir)
+  if not cmake_file then
+    vim.notify("No CMakeLists.txt found", vim.log.levels.ERROR)
+    return
+  end
+
+  vim.cmd("edit " .. cmake_file)
+  vim.fn.search(filename, "w")
+  vim.cmd("normal! zz")
+end
+
 return M

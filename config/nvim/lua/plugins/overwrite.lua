@@ -11,6 +11,9 @@ return {
   },
   {
     "chaoren/vim-wordmotion",
+    config = function()
+      vim.g.wordmotion_prefix = "<space>"
+    end,
   },
   {
     "metakirby5/codi.vim",
@@ -21,7 +24,13 @@ return {
       { "<leader><space>", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
       { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
       { "<leader>ff", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
-      { "<C-CR>", Snacks.zen.zoom, desc = "Zoom window" },
+      {
+        "<C-CR>",
+        function()
+          Snacks.zen.zoom()
+        end,
+        desc = "Zoom window",
+      },
     },
   },
   {
@@ -117,9 +126,10 @@ return {
     },
   },
   {
-    "blink/cmp.nvim",
+    "saghen/blink.cmp",
     opts = {
-      keymap = { preset = "super-tab" },
+      keymap = { ["<CR>"] = false },
     },
   },
+  { "metakirby5/codi.vim" },
 }

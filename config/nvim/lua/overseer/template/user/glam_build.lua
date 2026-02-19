@@ -22,7 +22,11 @@ return {
         builder = function()
           return {
             cmd = { "bash", "-lc", full_cmd },
-            components = { { "on_output_quickfix", open = false, set_diagnostics = true }, "default" },
+            components = {
+              { "on_output_quickfix", open = false, set_diagnostics = true },
+              "default",
+              "restart_on_save",
+            },
             name = full_cmd,
           }
         end,
