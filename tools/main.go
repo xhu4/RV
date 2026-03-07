@@ -1,6 +1,6 @@
 // deploy-bedtime.go
-// Usage: sudo go run . --bedtime 21:00 --wakeup 06:00
-// Or build: go build -o deploy-bedtime && sudo ./deploy-bedtime
+// Usage: sudo go run . --window 21:00-06:00
+// Or build: go build -o deploy-bedtime && sudo ./deploy-bedtime --window 21:00-06:00
 
 package main
 
@@ -26,20 +26,29 @@ type SleepWindow struct {
 	WakeupMinute  int
 }
 
-func parseHHMM(s, name string) (int, int) {
-	parts := strings.SplitN(s, ":", 2)
-	if len(parts) != 2 {
-		log.Fatalf("invalid %s %q: expected HH:MM", name, s)
+func parseSleepWindow(s string) SleepWindow {
+	halves := strings.SplitN(s, "-", 2)
+	if len(halves) != 2 {
+		log.Fatalf("invalid --window %q: expected HH:MM-HH:MM", s)
 	}
-	h, err := strconv.Atoi(parts[0])
-	if err != nil || h < 0 || h > 23 {
-		log.Fatalf("invalid hour in %s %q", name, s)
+	parseHHMM := func(hhmm, side string) (int, int) {
+		parts := strings.SplitN(hhmm, ":", 2)
+		if len(parts) != 2 {
+			log.Fatalf("invalid %s time %q in --window: expected HH:MM", side, hhmm)
+		}
+		h, err := strconv.Atoi(parts[0])
+		if err != nil || h < 0 || h > 23 {
+			log.Fatalf("invalid hour in %s time %q", side, hhmm)
+		}
+		m, err := strconv.Atoi(parts[1])
+		if err != nil || m < 0 || m > 59 {
+			log.Fatalf("invalid minute in %s time %q", side, hhmm)
+		}
+		return h, m
 	}
-	m, err := strconv.Atoi(parts[1])
-	if err != nil || m < 0 || m > 59 {
-		log.Fatalf("invalid minute in %s %q", name, s)
-	}
-	return h, m
+	bh, bm := parseHHMM(halves[0], "bedtime")
+	wh, wm := parseHHMM(halves[1], "wakeup")
+	return SleepWindow{bh, bm, wh, wm}
 }
 
 // ---- Guard script ----------------------------------------------------------
@@ -156,24 +165,15 @@ func applyFiles(specs []fileSpec, g guardScriptData, dryRun bool) {
 // ---- Main ------------------------------------------------------------------
 
 func main() {
-	bedtime := flag.String("bedtime", "21:00", "time to shut down each night (HH:MM, 24h)")
-	wakeup  := flag.String("wakeup",  "06:00", "time sleep window ends (HH:MM, 24h)")
-	dryRun  := flag.Bool("dry-run",   false,   "print files without writing them")
+	window := flag.String("window", "21:00-06:00", "sleep window as bedtime-wakeup (HH:MM-HH:MM, 24h)")
+	dryRun := flag.Bool("dry-run", false,         "print files without writing them")
 	flag.Parse()
 
 	if os.Geteuid() != 0 && !*dryRun {
 		log.Fatal("must be run as root (or with --dry-run). Try: sudo go run .")
 	}
 
-	bh, bm := parseHHMM(*bedtime, "--bedtime")
-	wh, wm := parseHHMM(*wakeup,  "--wakeup")
-
-	w := SleepWindow{
-		BedtimeHour:   bh,
-		BedtimeMinute: bm,
-		WakeupHour:    wh,
-		WakeupMinute:  wm,
-	}
+	w := parseSleepWindow(*window)
 
 	fmt.Printf("\n=== Bedtime Shutdown Deployer ===\n")
 	fmt.Printf("Platform     : %s\n", runtime.GOOS)
