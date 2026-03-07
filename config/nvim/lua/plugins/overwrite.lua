@@ -142,6 +142,10 @@ return {
       keymap = { ["<CR>"] = false },
     },
   },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    enabled = false,
+  },
   { "metakirby5/codi.vim" },
   {
     "stevearc/overseer.nvim",
