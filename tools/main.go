@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+	"time"
 )
 
 // ---- Sleep window ----------------------------------------------------------
@@ -24,6 +25,9 @@ type SleepWindow struct {
 	BedtimeMinute int
 	WakeupHour    int
 	WakeupMinute  int
+	// 5 minutes before bedtime — used for pre-shutdown notification
+	PreBedtimeHour   int
+	PreBedtimeMinute int
 }
 
 func parseSleepWindow(s string) SleepWindow {
@@ -48,7 +52,9 @@ func parseSleepWindow(s string) SleepWindow {
 	}
 	bh, bm := parseHHMM(halves[0], "bedtime")
 	wh, wm := parseHHMM(halves[1], "wakeup")
-	return SleepWindow{bh, bm, wh, wm}
+	// Compute 5 minutes before bedtime for pre-shutdown notification
+	pre := time.Date(0, 1, 1, bh, bm, 0, 0, time.UTC).Add(-5 * time.Minute)
+	return SleepWindow{bh, bm, wh, wm, pre.Hour(), pre.Minute()}
 }
 
 // ---- Guard script ----------------------------------------------------------
@@ -57,6 +63,7 @@ func parseSleepWindow(s string) SleepWindow {
 type guardSnippets struct {
 	ScheduleShutdown string // bash command to schedule a delayed shutdown
 	IsPending        string // bash expression: true if a shutdown is already pending
+	NotifyCmd        string // bash command to send a user notification
 }
 
 // guardScriptData is the complete template data for the guard script.
