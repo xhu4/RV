@@ -1,0 +1,30 @@
+mainBranches:
+  - develop
+
+keybinding:
+  universal:
+    pushFiles: <disabled>
+    pullFiles: <disabled>
+    createRebaseOptionsMenu: <disabled>
+
+customCommands:
+  - key: '<c-U>'
+    context: 'localBranches'
+    command: 'git up'
+    description: 'Checkout base branch'
+  - key: '<c-D>'
+    context: 'localBranches'
+    command: 'git down'
+    description: 'Checkout child branch'
+  - key: 'm'
+    context: 'global'
+    command: 'git mg'
+    description: 'Merge base branch'
+  - key: 'P'
+    context: 'global'
+    command: 'git ps'
+    description: 'Push to origin'
+  - key: 'p'
+    context: 'global'
+    command: 'git po'
+    description: 'Pull from origin'

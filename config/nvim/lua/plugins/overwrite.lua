@@ -20,6 +20,17 @@ return {
   },
   {
     "folke/snacks.nvim",
+    opts = {
+      picker = {
+        win = {
+          input = {
+            keys = {
+              ["<c-h>"] = { "toggle_hidden", mode = { "n", "i" } },
+            },
+          },
+        },
+      },
+    },
     keys = {
       { "<leader><space>", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
       { "<leader>fF", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
@@ -132,4 +143,12 @@ return {
     },
   },
   { "metakirby5/codi.vim" },
+  {
+    "stevearc/overseer.nvim",
+    keys = {
+      "<leader>os",
+      "<cmd>OverseerShell<cr>",
+      desc = "Overseer Run Shell Command",
+    },
+  },
 }

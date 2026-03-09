@@ -55,5 +55,9 @@ local set_keymaps = function()
     end
     vim.cmd("edit " .. package_file)
   end, { desc = "Open package.xml for current project" })
+
+  vim.keymap.set({ "i", "n" }, "<C-S-H>", "<Cmd>tabprevious<cr>", { desc = "Previous Tab" })
+
+  vim.keymap.set({ "i", "n" }, "<C-S-L>", "<Cmd>tabnext<cr>", { desc = "Next Tab" })
 end
 vim.schedule(set_keymaps)

@@ -8,10 +8,12 @@
 	ci = commit
 	st = status
 	up = !git checkout $(git base)
-	mb = !git merge $(git base) --no-edit
 	rb = !git rebase $(git base)
 	down = !git checkout $(git child)
-	ph = push origin
+	ps = push origin
+	mg = merge --no-edit
+	current = branch --show-current
+	po = !git fetch && git pull origin $(git current)
 [init]
 	defaultBranch = master
 [pull]
