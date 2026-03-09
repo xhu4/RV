@@ -38,5 +38,5 @@
 [user]
 	name = Xiukun Hu
 	email = xiukun.hu@geckorobotics.com
-[url "ssh://git@github.com"]
+[url "ssh://git@github.com/"]
   insteadOf = https://github.com/
