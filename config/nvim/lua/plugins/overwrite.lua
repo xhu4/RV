@@ -11,7 +11,7 @@ return {
   },
   {
     "chaoren/vim-wordmotion",
-    config = function()
+    init = function()
       vim.g.wordmotion_prefix = "<space>"
     end,
   },

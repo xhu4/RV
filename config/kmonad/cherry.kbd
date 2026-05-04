@@ -47,8 +47,8 @@
 )
 
 (defalias
-  mor (tap-hold-next 400 ret (layer-toggle symbols))
-  uds (tap-macro (sticky-key 1000 lsft) P100 - :delay 50)
+  mor (layer-toggle symbols)
+  uds (tap-macro (around-next sft) P100 - :delay 50)
 )
 
 (deflayer symbols

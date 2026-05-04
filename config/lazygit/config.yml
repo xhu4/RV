@@ -6,6 +6,9 @@ keybinding:
     pushFiles: <disabled>
     pullFiles: <disabled>
     createRebaseOptionsMenu: <disabled>
+  commits:
+    moveDownCommit: <c-j>
+    moveUpCommit: <c-k>
 
 customCommands:
   - key: '<c-U>'

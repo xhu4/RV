@@ -59,5 +59,7 @@ local set_keymaps = function()
   vim.keymap.set({ "i", "n" }, "<C-S-H>", "<Cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
   vim.keymap.set({ "i", "n" }, "<C-S-L>", "<Cmd>tabnext<cr>", { desc = "Next Tab" })
+
+  vim.keymap.set({ "i", "n" }, "<C-S-s>", "<Cmd>noau w<cr>", { desc = "No-autocmd save" })
 end
 vim.schedule(set_keymaps)
